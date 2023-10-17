@@ -101,39 +101,39 @@ elif option == "Enter URL":
     url = st.text_input("Enter a URL:")
     if url:
         text = fetch_url(url)
-        wordcloud = generate_wordcloud(text)
-        st.image(wordcloud.to_array(), use_column_width=True)
-        
-        from textblob import TextBlob
-        
-        blob = TextBlob(text)
-        sentiment = blob.sentiment.polarity
-        
-        if sentiment > 0:
-            st.write("The sentiment of the text is positive.")
-        elif sentiment < 0:
-            st.write("The sentiment of the text is negative.")
-        else:
-            st.write("The sentiment of the text is neutral.")
-        st.header("Sentiment Analysis")
-        st.write("The sentiment analysis score is:", sentiment)
-        st.write("The sentiment analysis score ranges from -1 to 1, where -1 is the most negative sentiment and 1 is the most positive sentiment. A score of 0 indicates a neutral sentiment.")
-        st.header("Subjectivity Analysis")
-        st.write("The subjectivity score is:", blob.sentiment.subjectivity)
-        st.write("The subjectivity score ranges from 0 to 1, where 0 is the most objective and 1 is the most subjective. A score of 0 indicates a very objective text, while a score of 1 indicates a very subjective text.")
-        
-        st.header("Top Ngrams")
-        n = st.slider("Select the number of grams:", 1, 5, 2)
-        k = st.slider("Select the number of top ngrams to display:", 1, 20, 10)
-        top_ngrams = get_top_ngrams(text, n, k)
-        st.write(f"Top {k} {n}-grams:")
-        for ngram, count in top_ngrams:
-            st.write(f"{ngram}: {count}")
-        
-        st.header("Topic Modeling")
-        lda_model = generate_topic_model(text)
-        topics = lda_model.show_topics(num_topics=5, num_words=10, formatted=False)
-        for i, topic in enumerate(topics):
-            st.write(f"Topic {i+1}:")
-            for word, prob in topic[1]:
-                st.write(f"{word} ({prob:.2f})")
+    wordcloud = generate_wordcloud(text)
+    st.image(wordcloud.to_array(), use_column_width=True)
+    
+    from textblob import TextBlob
+    
+    blob = TextBlob(text)
+    sentiment = blob.sentiment.polarity
+    
+    if sentiment > 0:
+        st.write("The sentiment of the text is positive.")
+    elif sentiment < 0:
+        st.write("The sentiment of the text is negative.")
+    else:
+        st.write("The sentiment of the text is neutral.")
+    st.header("Sentiment Analysis")
+    st.write("The sentiment analysis score is:", sentiment)
+    st.write("The sentiment analysis score ranges from -1 to 1, where -1 is the most negative sentiment and 1 is the most positive sentiment. A score of 0 indicates a neutral sentiment.")
+    st.header("Subjectivity Analysis")
+    st.write("The subjectivity score is:", blob.sentiment.subjectivity)
+    st.write("The subjectivity score ranges from 0 to 1, where 0 is the most objective and 1 is the most subjective. A score of 0 indicates a very objective text, while a score of 1 indicates a very subjective text.")
+    
+    st.header("Top Ngrams")
+    n = st.slider("Select the number of grams:", 1, 5, 2)
+    k = st.slider("Select the number of top ngrams to display:", 1, 20, 10)
+    top_ngrams = get_top_ngrams(text, n, k)
+    st.write(f"Top {k} {n}-grams:")
+    for ngram, count in top_ngrams:
+        st.write(f"{ngram}: {count}")
+    
+    st.header("Topic Modeling")
+    lda_model = generate_topic_model(text)
+    topics = lda_model.show_topics(num_topics=5, num_words=10, formatted=False)
+    for i, topic in enumerate(topics):
+        st.write(f"Topic {i+1}:")
+        for word, prob in topic[1]:
+            st.write(f"{word} ({prob:.2f})")
