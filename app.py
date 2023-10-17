@@ -19,6 +19,7 @@ def generate_wordcloud(text):
 import nltk
 from nltk.corpus import stopwords
 nltk.download('punkt')
+nltk.download('stopwords')
 
 def get_top_ngrams(text, n, k):
     words = nltk.word_tokenize(text)
