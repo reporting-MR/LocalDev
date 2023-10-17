@@ -55,7 +55,49 @@ def generate_topic_model(text):
                                                 per_word_topics=True)
     return lda_model
 
-st.title("URL Wordcloud Generator")
+st.title("URL/Text Wordcloud Generator")
+
+option = st.radio("Select an option:", ("Enter raw text", "Enter URL"))
+
+if option == "Enter raw text":
+    text = st.text_area("Enter some text:")
+elif option == "Enter URL":
+    url = st.text_input("Enter a URL:")
+    if url:
+        text = fetch_url(url)
+
+if text:
+    wordcloud = generate_wordcloud(text)
+    st.image(wordcloud.to_array(), use_column_width=True)
+
+    from textblob import TextBlob
+
+    blob = TextBlob(text)
+    sentiment = blob.sentiment.polarity
+
+    if sentiment > 0:
+        st.write("The sentiment of the text is positive.")
+    elif sentiment < 0:
+        st.write("The sentiment of the text is negative.")
+    else:
+        st.write("The sentiment of the text is neutral.")
+    st.header("Sentiment Analysis")
+    st.write("The sentiment analysis score is:", sentiment)
+    st.write("The sentiment analysis score ranges from -1 to 1, where -1 is the most negative sentiment and 1 is the most positive sentiment. A score of 0 indicates a neutral sentiment.")
+    st.header("Subjectivity Analysis")
+    st.write("The subjectivity score is:", blob.sentiment.subjectivity)
+    st.write("The subjectivity score ranges from 0 to 1, where 0 is the most objective and 1 is the most subjective. A score of 0 indicates a very objective text, while a score of 1 indicates a very subjective text.")
+
+    st.header("Top Ngrams")
+    n = st.slider("Select the number of grams:", 1, 5, 2)
+    k = st.slider("Select the number of top ngrams to display:", 1, 20, 10)
+    top_ngrams = get_top_ngrams(text, n, k)
+    st.write(f"Top {k} {n}-grams:")
+    for ngram, count in top_ngrams:
+        st.write(f"{ngram}: {count}")
+
+    st.header("Named Entity Recognition")
+    k = st.slider("Select the number of top entities to display:", 1, 20, 10)
 
 url = st.text_input("Enter a URL:")
 if url:
@@ -88,6 +130,12 @@ if url:
     st.write(f"Top {k} {n}-grams:")
     for ngram, count in top_ngrams:
         st.write(f"{ngram}: {count}")
+
+    st.header("Named Entity Recognition")
+    k = st.slider("Select the number of top entities to display:", 1, 20, 10)
+    named_entities = get_named_entities(text, k)
+    entity_df = pd.DataFrame(named_entities, columns=['Entity', 'Frequency'])
+    st.write(entity_df)
 
     st.header("Topic Modeling")
     lda_model = generate_topic_model(text)
