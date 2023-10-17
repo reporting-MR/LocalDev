@@ -29,7 +29,6 @@ def get_top_ngrams(text, n, k):
     return ngram_freq.most_common(k)
 
 import spacy
-nlp = spacy.load('en_core_web_sm')
 
 def get_named_entities(text, k):
     nlp = spacy.load('en_core_web_sm')
