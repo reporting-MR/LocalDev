@@ -28,15 +28,6 @@ def get_top_ngrams(text, n, k):
     ngram_freq = nltk.FreqDist(ngrams)
     return ngram_freq.most_common(k)
 
-import spacy
-
-def get_named_entities(text, k):
-    nlp = spacy.load('en_core_web_sm')
-    doc = nlp(text)
-    entities = [(ent.text, ent.label_) for ent in doc.ents]
-    entity_freq = Counter(entities)
-    return entity_freq.most_common(k)
-
 import gensim
 from gensim.utils import simple_preprocess
 from gensim.parsing.preprocessing import STOPWORDS
@@ -97,12 +88,6 @@ if url:
     st.write(f"Top {k} {n}-grams:")
     for ngram, count in top_ngrams:
         st.write(f"{ngram}: {count}")
-
-    #st.header("Named Entity Recognition")
-    #k = st.slider("Select the number of top entities to display:", 1, 20, 10)
-    #named_entities = get_named_entities(text, k)
-    #entity_df = pd.DataFrame(named_entities, columns=['Entity', 'Frequency'])
-    #st.write(entity_df)
 
     st.header("Topic Modeling")
     lda_model = generate_topic_model(text)
