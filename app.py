@@ -30,6 +30,7 @@ def get_top_ngrams(text, n, k):
 
 import spacy
 spacy.cli.download("en_core_web_sm")
+nlp = spacy.load('en_core_web_sm')
 
 def get_named_entities(text, k):
     nlp = spacy.load('en_core_web_sm')
